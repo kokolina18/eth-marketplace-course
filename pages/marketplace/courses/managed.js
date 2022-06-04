@@ -7,8 +7,29 @@ import { BaseLayout } from "@components/ui/layout";
 import { MarketHeader } from "@components/ui/marketplace";
 import { useWeb3 } from "@components/providers" 
 
-export default function ManagedCourses() {
+const VerificationInput = ({onVerify}) => { 
   const [email, setEmail] = useState('')
+  return (
+    <div className="relative flex mr-2 rounded-md">
+      <input
+        value={email}
+        onChange={ ({target: {value}}) => setEmail(value) }
+        type="text"
+        name="account"
+        id="account"
+        className="block p-4 border-gray-300 rounded-md shadow-md w-96 focus:ring-indigo-500 focus:border-indigo-500 pl-7 sm:text-sm"
+        placeholder="0x2341ab..." />
+      <Button
+        onClick={()=>{
+          onVerify(email)
+        }}>
+        Verify
+      </Button>
+    </div>
+  )
+} 
+
+export default function ManagedCourses() {
   const [proofedOwnership, setProofedOwnership] = useState({})
   const { web3 } = useWeb3()
   const { account } = useAccount()
@@ -23,9 +44,11 @@ export default function ManagedCourses() {
 
     proofToCheck === proof ?
       setProofedOwnership({
+        ...proofedOwnership,
         [hash]: true
       }) :
       setProofedOwnership({
+        ...proofedOwnership,
         [hash]: false
       })
   }
@@ -41,24 +64,11 @@ export default function ManagedCourses() {
           <ManagedCourseCard
             key={course.ownedCourseId}
             course={course}>
-            <div className="relative flex mr-2 rounded-md">
-            <input
-              value={email}
-              onChange={ ({target: {value}}) => setEmail(value)}
-              type="text"
-              name="account"
-              id="account"
-              className="block p-4 border-gray-300 rounded-md shadow-md w-96 focus:ring-indigo-500 focus:border-indigo-500 pl-7 sm:text-sm"
-              placeholder="0x2341ab..." />
-            <Button
-              onClick={()=>{
-                  verifyCourse(email, { 
-                    hash: course.hash, proof: course.proof
-                })
-              }}>
-              Verify
-            </Button>
-          </div>
+            <VerificationInput 
+              onVerify={(email)=>{
+                verifyCourse(email, {hash: course.hash, proof: course.proof})
+              }}/>
+           
           {
             proofedOwnership[course.hash] &&
             <div>
