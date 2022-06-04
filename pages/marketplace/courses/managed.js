@@ -57,7 +57,7 @@ export default function ManagedCourses() {
   }
 
   const activateCourse = async courseHash => {
-    console.log(account.data)
+     
     try {
       await contract.methods
         .activateCourse(courseHash)

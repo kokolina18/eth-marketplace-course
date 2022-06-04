@@ -30,8 +30,9 @@ export const handler = (web3, provider) => () => {
     return () => {
       provider?.removeListener("accountsChanged", mutator)
     }
-  }, [provider]) 
-  
+  }, [provider])
+
+ 
   return {
     data,
     isAdmin: (
