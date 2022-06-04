@@ -1,6 +1,6 @@
-const Item = ({title, value}) => {
+const Item = ({title, value, className}) => {
   return (
-    <div className="px-4 py-5 bg-gray-50 sm:px-6">
+    <div className={`px-4 py-5 ${className} sm:px-6`}>
       <div className="text-sm font-medium text-gray-500">
         {title}
       </div>
@@ -16,8 +16,15 @@ export default function ManagedCourseCard({children, course}) {
   return (
     <div className="mb-3 overflow-hidden bg-white border shadow sm:rounded-lg">
       <div className="flex-1 border-t border-gray-200">
-        <Item title='Course ID' value={course.ownedCourseId}/>
-        <Item title='Proof' value={course.proof}/>
+        {
+          Object.keys(course).map((key, i)=>
+            <Item 
+              key={key}
+              title={key[0].toUpperCase() + key.slice(1)}
+              // title={key}
+              value={course[key]}
+              className={`${i % 2 ? 'bg-gray-50' : 'bg-white'}`}/>
+          )}
         <div className="px-4 py-5 bg-white sm:px-6">
           {children}
         </div> 
